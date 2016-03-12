@@ -66,12 +66,36 @@ body.container h1 {
     position: fixed;
     top: 0;
     left: 0;
-    background-color: red;
     z-index: -1;
     width: 100%;
     height: 100%;
-
 }
 
 #fuzz {
+}
+
+#mosaic {
+    background-image: url('/img/bg.png');
+    background-repeat: repeat;
+    width: 400%;
+    height: 400%;
+    position: relative;
+    top: -100%;
+    left: -100%;
+    animation: floaty 240s linear infinite;
+}
+
+@keyframes floaty {
+    0% {
+        top: -100%;
+        left: -100%;
+    }
+    50% {
+        top: -200%;
+        left: -200%;
+    }
+    100% {
+        top: -100%;
+        left: -100%;
+    }
 }
