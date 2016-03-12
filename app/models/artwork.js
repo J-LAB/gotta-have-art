@@ -3,7 +3,7 @@ var mongoose = require('mongoose'),
 
 var ArtworkSchema = new Schema({
 	collectionId: Number,
-	externalId: Number,
+	externalId: String,
 	imageFilename: String,
   artistTextOne: String,
   artistTextTwo: String,
@@ -13,38 +13,32 @@ var ArtworkSchema = new Schema({
   artistTextSix: String,
   artistTextSeven: String,
 	artists: [
-    {type : Schema.ObjectId, ref : 'artist'}
+    {type : Schema.ObjectId, ref : 'Artist'}
   ],
   titleOne: String,
   titleTwo: String,
   titleThree: String,
   titleFour: String,
   dateText: String,
-  date: Date,
-  dateRangeStart: Date,
-  dateRangeEnd: Date,
+  dateStart: Date,
+  dateEnd: Date,
   mediumText: String,
-  medium: [
-    String
+  mediums: [
+    {type : Schema.ObjectId, ref : 'Medium'}
   ],
   materialsText: String,
   materials: [
-    String
+    {type : Schema.ObjectId, ref : 'Material'}
   ],
   techniquesText: String,
   techniques: [
-    String
+    {type : Schema.ObjectId, ref : 'Technique'}
   ],
   supportsText: String,
   supports: [
-    String
+    {type : Schema.ObjectId, ref : 'Support'}
   ],
-  dimensionsText: String,
-  dimensions: {
-    length: Number,
-    width: Number,
-    height: Number
-  },
+  dimensions: String,
   locationText: String,
   location: { type: Schema.ObjectId, ref: 'Location', index: true },
   geography: String,

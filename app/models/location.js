@@ -1,12 +1,15 @@
 var mongoose = require('mongoose'),
+  findOrCreate = require('mongoose-findorcreate'),
 	Schema = mongoose.Schema;
 
 var LocationSchema = new Schema({
-	name: { type: String, required: true, trim: true },
-	type: { type: String, required: true, trim: true },
-	floor: { type: String, required: true, trim: true },
-	enabled: { type: Boolean, required: false, trim: true },
-	title: { type: String, required: false, trim: true }
+	name: String,
+	type: String,
+	floor: String,
+	enabled: Boolean,
+	title: String
 });
+
+LocationSchema.plugin(findOrCreate);
 
 mongoose.model('Location', LocationSchema);

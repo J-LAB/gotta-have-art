@@ -1,46 +1,310 @@
 #!/usr/bin/env node
 
 var mongoose = require('mongoose'),
-  cfg = require('./config'),
-  fs = require('fs');
+  cfg = require('../config'),
+  fs = require('fs'),
+  index = require('../app/models/index');
 
-mongoose.connect(cfg.db);
-var Location = mongoose.model('Location'),
- Artwork = mongoose.model('Artwork'),
+function connectDB() {
+  mongoose.connect(cfg.db);
+  mongoose.connection.db.dropDatabase(function(err, result) {console.log(result);});
+}
 
-var db = mongoose.connection,
+var Artist = mongoose.model('Artist'),
+  Artwork = mongoose.model('Artwork'),
+  Location = mongoose.model('Location'),
+  Material = mongoose.model('Material'),
+  Medium = mongoose.model('Medium'),
+  Support = mongoose.model('Support'),
+  Technique = mongoose.model('Technique');
 
-fs.readFile('./data/locations.json', function (err,locationData) {
+var locationCount = 0;
+var supportCount = 0;
+var artworkCount = 0;
+var artistCount = 0;
+var materialCount = 0;
+var techniqueCount = 0;
+var mediumCount = 0;
+
+function addLocationData() {
+  var locationData = fs.readFileSync('./data/locations.json', 'utf8');
   locationData = JSON.parse(locationData);
-  for(var i = 0; i < locationData.length; i++) {
+  locationData.locations.forEach(function (locationObject) {
     var newLocation = new Location();
-    newLocation.name = locationData[i].name;
-    newLocation.type = locationData[i].type;
-    newLocation.floor = locationData[i].floor;
-    if ('enabled' in locationData[i]) {
-      newLocation.enabled = locationData[i].enabled;
-    }
-    if ('title' in locationData[i]) {
-      newLocation.title = locationData[i].title;
+    newLocation.name = locationObject.name;
+    newLocation.type = locationObject.type;
+    newLocation.floor = locationObject.floor;
+    newLocation.title = locationObject.title;
+    if ('enabled' in locationObject) {
+      newLocation.enabled = locationObject.enabled;
     }
     newLocation.save(function (err) {
-      console.log(err);
+      if (err) {
+        console.log(err);
+      }
     });
-  }
-});
+    locationCount++;
+    statusUpdate();
+  });
+}
 
-fs.readFile('./data/artworks.json', function (err,artworkData) {
+function addArtistData() {
+  var list = fs.readdirSync('./data/artists');
+  list.forEach(function (file) {
+    var path = "./data/artists/" + file;
+    var artistFile = fs.readFileSync(path, 'utf8');
+    var artistArray = artistFile.split("#");
+    artistArray.forEach(function (artist) {
+      artist = artist.trim();
+      var newArtist = new Artist();
+      newArtist.name = artist;
+      newArtist.save(function (err) {
+        if (err != null) {
+          console.log(err);
+        }
+      });
+      artistCount++;
+      statusUpdate();
+    });
+  });
+}
+
+
+function addArtworkData() {
+  var artworkData = fs.readFileSync('./data/artworks.json', 'utf8');
   artworkData = JSON.parse(artworkData);
   for(var i = 0; i < artworkData.length; i++) {
     var newArtwork = new Artwork();
-    newArtwork.name = artworkData[i].name;
-    newArtwork.type = artworkData[i].type;
-    newArtwork.floor = artworkData[i].floor;
-    if ('enabled' in artworkData[i]) {
-      newArtwork.enabled = artworkData[i].enabled;
+    newArtwork.collectionId = artworkData[i].objectid;
+    newArtwork.externalId = artworkData[i].objectnumber;
+    newArtwork.imageFilename = artworkData[i].imageFilename;
+    if ('artistName1' in artworkData[i]) {
+      var artistName = artworkData[i].artistName1;
+      newArtwork.artistTextOne = artistName;
+      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
+        if (err) {
+          console.log(err);
+        }
+
+        if (created) {
+          artistCount++;
+          statusUpdate();
+        }
+        newArtwork.artists.push(artist);
+      });
+    };
+    if ('artistName2' in artworkData[i]) {
+      var artistName = artworkData[i].artistName2;
+      newArtwork.artistTextTwo = artistName;
+      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
+        if (err) {
+          console.log(err);
+        }
+
+        if (created) {
+          artistCount++;
+          statusUpdate();
+        }
+        newArtwork.artists.push(artist);
+      });
     }
-    newLocation.save(function (err) {
-      console.log(err);
+    if ('artistName3' in artworkData[i]) {
+      var artistName = artworkData[i].artistName3;
+      newArtwork.artistTextThree = artistName;
+      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
+        if (err) {
+          console.log(err);
+        }
+
+        if (created) {
+          artistCount++;
+          statusUpdate();
+        }
+        newArtwork.artists.push(artist);
+      });
+    }
+    if ('artistName4' in artworkData[i]) {
+      var artistName = artworkData[i].artistName4;
+      newArtwork.artistTextFour = artistName;
+      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
+        if (err) {
+          console.log(err);
+        }
+
+        if (created) {
+          artistCount++;
+          statusUpdate();
+        }
+        newArtwork.artists.push(artist);
+      });
+    }
+    if ('artistName5' in artworkData[i]) {
+      var artistName = artworkData[i].artistName5;
+      newArtwork.artistTextFive = artistName;
+      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
+        if (err) {
+          console.log(err);
+        }
+
+        if (created) {
+          artistCount++;
+          statusUpdate();
+        }
+        newArtwork.artists.push(artist);
+      });
+    }
+    if ('artistName6' in artworkData[i]) {
+      var artistName = artworkData[i].artistName6;
+      newArtwork.artistTextSix = artistName;
+      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
+        if (err) {
+          console.log(err);
+        }
+
+        if (created) {
+          artistCount++;
+          statusUpdate();
+        }
+        newArtwork.artists.push(artist);
+      });
+    }
+    if ('artistName7' in artworkData[i]) {
+      var artistName = artworkData[i].artistName7;
+      newArtwork.artistTextSeven = artistName;
+      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
+        if (err) {
+          console.log(err);
+        }
+
+        if (created) {
+          artistCount++;
+          statusUpdate();
+        }
+        newArtwork.artists.push(artist);
+      });
+    }
+    newArtwork.titleOne = artworkData[i].titleOfWork1;
+    newArtwork.titleTwo = artworkData[i].titleOfWork2;
+    newArtwork.titleThree = artworkData[i].titleOfWork3;
+    newArtwork.titleFour = artworkData[i].titleOfWork4;
+    newArtwork.dateStart = artworkData[i].dateSearchBegin;
+    newArtwork.dateEnd = artworkData[i].dateSearchEnd;
+    if ('medium' in artworkData[i]) {
+      newArtwork.mediumText = artworkData[i].medium;
+      var mediumArray = artworkData[i].medium.split(",");
+      mediumArray.forEach(function (mediumName) {
+        Medium.findOrCreate({ name: mediumName.trim() }, function (err, medium, created) {
+          if (err) {
+            console.log(err);
+          }
+          if (created) {
+            mediumCount++;
+            statusUpdate();
+          }
+          newArtwork.mediums.push(medium);
+        });
+      });
+    }
+    if ('materials' in artworkData[i]) {
+      newArtwork.materialsText = artworkData[i].materials;
+      var materialsArray = artworkData[i].materials.split(",");
+      materialsArray.forEach(function (materialName) {
+        Material.findOrCreate({ name: materialName.trim() }, function (err, material, created) {
+          if (err) {
+            console.log(err);
+          }
+          if (created) {
+            materialCount++;
+            statusUpdate();
+          }
+
+          newArtwork.materials.push(material);
+        });
+      });
+    }
+    if ('techniques' in artworkData[i]) {
+      newArtwork.techniquesText = artworkData[i].techniques;
+      var techniquesArray = artworkData[i].techniques.split(",");
+      techniquesArray.forEach(function (techniqueName) {
+        Technique.findOrCreate({ name: techniqueName.trim() }, function (err, technique, created) {
+          if (err) {
+            console.log(err);
+          }
+          if (created) {
+            techniqueCount++;
+            statusUpdate();
+          }
+
+          newArtwork.techniques.push(technique);
+        });
+      });
+    }
+    if ('supports' in artworkData[i]) {
+      newArtwork.supportsText = artworkData[i].supports;
+      var supportsArray = artworkData[i].supports.split(",");
+      supportsArray.forEach(function (supportName) {
+        Support.findOrCreate({ name: supportName.trim() }, function (err, support, created) {
+          if (err) {
+            console.log(err);
+          }
+          if (created) {
+            supportCount++;
+            statusUpdate();
+          }
+
+          newArtwork.supports.push(support);
+        });
+      });
+    }
+    newArtwork.dimensions = artworkData[i].dimensions;
+    if ('galleryLocation' in artworkData[i]) {
+      var locationName = artworkData[i].galleryLocation;
+      newArtwork.locationText = locationName;
+      var galleryRegex = /Gallery (.*?), .*/;
+      var match = galleryRegex.exec(locationName);
+      if (match != null) {
+        locationName = match[1];
+      }
+      Location.findOrCreate({ name: locationName }, function (err, location, created) {
+        if (err) {
+          console.log(err);
+        }
+        if (created) {
+          locationCount++;
+          statusUpdate();
+        }
+        newArtwork.location = location;
+      });
+    }
+    newArtwork.latitude = artworkData[i].latitude;
+    newArtwork.longitude = artworkData[i].longitude;
+    newArtwork.creditLine = artworkData[i].creditLine;
+    newArtwork.url = artworkData[i].pmaUrl;
+    newArtwork.save(function (err) {
+      if (err) {
+        console.log(err);
+      }
     });
+    artworkCount++;
+    statusUpdate();
   }
-});
+}
+
+function run() {
+  connectDB();
+  addLocationData();
+  addArtistData();
+  addArtworkData();
+}
+
+function statusUpdate() {
+  console.log(locationCount + " locations added \n");
+  console.log(artistCount + " artists added \n");
+  console.log(artworkCount + " artworks added \n");
+  console.log(materialCount + " materials added \n");
+  console.log(mediumCount + " medium added \n");
+  console.log(techniqueCount + " techniques added \n");
+  console.log(supportCount + " supports added \n");
+}
+
+run();
