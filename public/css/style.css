@@ -1,0 +1,31 @@
+body {
+  font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  max-width: 1024px;
+  margin: 0 auto;
+}
+
+a {
+  color: #00B7FF;
+}
+
+nav .container-fluid {
+    display: flex;
+    flex-direction: row;
+}
+
+ul.navbar-nav {
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    justify-content: space-around;
+    margin: 0;
+}
+
+body.container {
+    display: flex;
+    flex-direction: column;
+}
+
+body.container h1 {
+    text-align: center;
+}
