@@ -1,0 +1,46 @@
+#!/usr/bin/env node
+
+var mongoose = require('mongoose'),
+  cfg = require('./config'),
+  fs = require('fs');
+
+mongoose.connect(cfg.db);
+var Location = mongoose.model('Location'),
+ Artwork = mongoose.model('Artwork'),
+
+var db = mongoose.connection,
+
+fs.readFile('./data/locations.json', function (err,locationData) {
+  locationData = JSON.parse(locationData);
+  for(var i = 0; i < locationData.length; i++) {
+    var newLocation = new Location();
+    newLocation.name = locationData[i].name;
+    newLocation.type = locationData[i].type;
+    newLocation.floor = locationData[i].floor;
+    if ('enabled' in locationData[i]) {
+      newLocation.enabled = locationData[i].enabled;
+    }
+    if ('title' in locationData[i]) {
+      newLocation.title = locationData[i].title;
+    }
+    newLocation.save(function (err) {
+      console.log(err);
+    });
+  }
+});
+
+fs.readFile('./data/artworks.json', function (err,artworkData) {
+  artworkData = JSON.parse(artworkData);
+  for(var i = 0; i < artworkData.length; i++) {
+    var newArtwork = new Artwork();
+    newArtwork.name = artworkData[i].name;
+    newArtwork.type = artworkData[i].type;
+    newArtwork.floor = artworkData[i].floor;
+    if ('enabled' in artworkData[i]) {
+      newArtwork.enabled = artworkData[i].enabled;
+    }
+    newLocation.save(function (err) {
+      console.log(err);
+    });
+  }
+});
