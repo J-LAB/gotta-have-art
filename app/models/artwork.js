@@ -40,13 +40,13 @@ var ArtworkSchema = new Schema({
     String
   ],
   dimensionsText: String,
-  dimensions: [
+  dimensions: {
     length: Number,
     width: Number,
-    height: Number,
-  ],
+    height: Number
+  },
   locationText: String,
-  location: { type: Schema.ObjectId, ref: 'Location', index: true }
+  location: { type: Schema.ObjectId, ref: 'Location', index: true },
   geography: String,
   latitude: Number,
   longitude: Number,
