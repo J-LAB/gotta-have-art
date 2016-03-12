@@ -7,5 +7,11 @@ module.exports = function (app) {
       message: req.session.messages
     });
   });
+  app.get('/adventure', function(req, res){
+    res.render('adventure', {
+      user: req.user,
+      message: req.session.messages
+    });
+  });
 };
 
