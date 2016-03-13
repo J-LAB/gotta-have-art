@@ -1,4 +1,5 @@
 require('./user');
+require('./adventure');
 require('./artist');
 require('./artwork');
 require('./location');
