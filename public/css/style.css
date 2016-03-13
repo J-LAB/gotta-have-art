@@ -98,9 +98,22 @@ body.container h1 span:last-of-type {
     justify-content: space-around;
 }
 
-#curated img {
+.adv {
     max-width: 304px;
     width: calc(33% - 16px);
+}
+
+.adv > h3 {
+    position: absolute;
+    text-align: center;
+    color: #fff;
+    text-shadow: 0 0 1px black;
+    text-align: center;
+    font-size: 1.5em;
+}
+
+.adv > img {
+    width: 100%;
 }
 
 #background {
