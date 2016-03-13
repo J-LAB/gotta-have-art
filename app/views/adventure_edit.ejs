@@ -37,7 +37,7 @@
               <a class "adv_nav_full" href='/adventure/<%= adventure._id %>/show/<%= (parseInt(index) + 1) %>'>Next</a>
             <% } else { %>
               <a class "adv_nav_left" href='/adventure/<%= adventure._id %>/edit/<%= (parseInt(index) - 1) %>'>Previous</a>
-              <a class "adv_nav_right" href='/adventure/<%= adventure._id %>/choose/<%= (parseInt(index) + 1) %>'>Next</a>
+              <a class "adv_nav_right" href='/adventure/<%= adventure._id %>/choose'>Next</a>
             <% } %>
           <% } else { %>
             <% if (index == 0) { %>

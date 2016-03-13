@@ -11,10 +11,14 @@
       <div class="jumbotron">
         <h1><%= artwork.titleOne %></h1>
         <h2><%= artwork.artistTextOne %></h2>
-        <img src='/img/full-res/<%= artwork.imageFilename %>' alt='<%= artwork.titleOne %>'>
+        <img height="300" src='/img/full-res/<%= artwork.imageFilename %>' alt='<%= artwork.titleOne %>'>
         <div class "adv_nav">
           <a class "adv_nav_left" href='/'>Reject</a>
-          <a class "adv_nav_right" href='/adventure/<%= index %>/add/<%= artwork._id %>'>Approve</a>
+          <% if (index == 0) { %>
+            <a class "adv_nav_right" href='/adventure/create/<%= artwork._id %>'>Approve</a>
+          <% } else { %>
+          <a class "adv_nav_right" href='/adventure/<%= adventure.id %>/add/<%= (parseInt(index) + 1) %>/<%= artwork._id %>'>Approve</a>
+          <% } %>
         </div>
       </div>
     </main>

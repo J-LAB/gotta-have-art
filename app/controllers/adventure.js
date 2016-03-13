@@ -8,7 +8,7 @@ var mongoose = require('mongoose'),
 var adventure = {};
 
 adventure.create = function(req, res) {
-    Artwork.find({ '_id': req.params.id }, function(err, artwork) {
+    Artwork.findOne({ '_id': req.params.id }, function(err, artwork) {
       if (err) {
         console.log('error', err);
         return next(err);
@@ -23,7 +23,8 @@ adventure.create = function(req, res) {
 
       res.render('adventure_view', {
         user: req.user,
-        index: req.params.index,
+        create: true,
+        index: 0,
         adventure: adventure,
         artwork: artwork
       });
@@ -67,6 +68,90 @@ adventure.new = function(req, res) {
       });
   });
 }
+adventure.edit = function(req, res) {
+  async.waterfall([
+    function(callback) {
+      Adventure.findOne({ '_id': req.params.id }, function(err, adventure) {
+        callback(err, adventure);
+      });
+    },
+    function(adventure, callback) {
+      Artwork.find({ '_id': adventure.artworks[req.params.index] }, function(err, artwork) {
+        callback(err, { adventure: adventure, artwork: artwork });
+      });
+    }
+  ], function(err, results) {
+    if (err) {
+      console.log('error', err);
+      return next(err);
+    }
+    res.render('adventure_edit', {
+      user: req.user,
+      index: req.params.index,
+      adventure: results.adventure,
+      artwork: results.artwork
+    });
+  });
+}
+
+adventure.add = function(req, res) {
+  async.waterfall([
+    function(callback) {
+      Adventure.findOne({ '_id': req.params.adventure_id }, function(err, adventure) {
+        callback(err, adventure);
+      });
+    },
+    function(adventure, callback) {
+      Artwork.find({ '_id': adventure.artworks[req.params.artwork_id] }, function(err, artwork) {
+        callback(err, { adventure: adventure, artwork: artwork });
+      });
+    }
+  ], function(err, results) {
+    if (err) {
+      console.log('error', err);
+      return next(err);
+    }
+    res.render('adventure_edit', {
+      user: req.user,
+      index: req.params.index,
+      adventure: results.adventure,
+      artwork: results.artwork
+    });
+  });
+}
+
+adventure.choose = function(req, res) {
+  async.waterfall([
+    function(callback) {
+      Adventure.count(function(err, count) {
+        if (err) {
+          return callback(err);
+        }
+        var rand = Math.floor(Math.random() * count);
+        Adventure.findOne().skip(rand).exec(function (err, adventure) {
+          callback(err, adventure);
+        });
+      });
+    },
+    function(adventure, callback) {
+      Artwork.find({ '_id': adventure.artworks[req.params.index] }, function(err, artwork) {
+        callback(err, { adventure: adventure, artwork: artwork });
+      });
+    }
+  ], function(err, results) {
+    if (err) {
+      console.log('error', err);
+      return next(err);
+    }
+    res.render('adventure_view', {
+      user: req.user,
+      create: true,
+      index: req.params.index,
+      adventure: results.adventure,
+      artwork: results.artwork
+    });
+  });
+}
 
 adventure.filter = function(req, res) {
   var q = Artwork.find();
@@ -87,10 +172,11 @@ adventure.filter = function(req, res) {
       console.log('error getting artwork', err);
       return next(err);
     }
+    console.log(artwork);
     res.render('adventure_choose', {
       user: req.user,
       index: 0,
-      artwork: artwork,
+      artwork: artwork[0],
       filters: req.body
     });
   });
@@ -128,6 +214,7 @@ adventure.show = function(req, res) {
       }
       res.render('adventure_view', {
         user: req.user,
+        create: false,
         index: req.params.index,
         adventure: results.adventure,
         artwork: results.artwork
