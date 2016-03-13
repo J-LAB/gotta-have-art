@@ -60,7 +60,9 @@ body.container {
 
 }
 
-body.container h1 {
+h1 {
+    font-family: "hamburgerheavenregular";
+    font-size: 3em;
     text-align: center;
     color: #2b90d9;
     text-shadow: 1px 1px 0 #282c37,
@@ -72,6 +74,53 @@ body.container h1 {
 
 body.container h1 span {
     display: block;
+}
+
+#adv_view {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-grow: 2;
+}
+
+#adv_view > * {
+}
+
+#adv_img {
+    flex-grow: 3;
+    background-position: center center;
+    background-size: cover;
+    border-radius: 6px 0 0 6px;
+    margin-left: 12px;
+    border: 1px solid black;
+    border-right: none;
+}
+
+.bug {
+    position: absolute;
+    top: 24px;
+    left: 10px;
+}
+
+#adv_map {
+    display: none;
+}
+
+#adv_comments {
+    display: none;
+}
+
+#adv_details {
+    padding: 0 12px;
+    margin-right: 12px;
+    flex-grow: 2;
+    border-radius: 0 6px 6px 0;
+    border: 1px solid black;
+    border-left: none;
+}
+
+#adv_nav {
+    flex-grow: 0;
 }
 
 #title {
@@ -90,22 +139,22 @@ body.container h1 span {
 }
 
 body.container h1 span:first-of-type {
-    font-family: "hamburgerheavenregular";
-    font-size: 2.5em;
+    font-size: 1.5em;
     letter-spacing: -1.5px;
 }
 
 body.container h1 span:last-of-type {
-    font-family: "hamburgerheavenregular";
-    font-size: 2.5em;
+    font-size: 1.5em;
     letter-spacing: 2px;
     line-height: 0.75em;
 }
 
 .jumbotron {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
+    flex-grow: 1;
 }
 
 .pitch {
@@ -190,8 +239,8 @@ header {
     flex-grow: 0;
 }
 main {
+    display: flex;
     flex-grow: 1;
-    background: linear-gradient(to bottom, white 0%, white 85%, #9baec8 100%);
 }
 
 footer {
