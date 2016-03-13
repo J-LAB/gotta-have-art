@@ -6,6 +6,6 @@ module.exports = function (app) {
   app.get('/adventure/:id/show/:index', controllers.adventure.show);
   app.get('/adventure/new', controllers.adventure.new);
   app.post('/adventure/filter', controllers.adventure.filter);
-  app.get('/adventure/:index/add/:id', controllers.adventure.add);
+  app.get('/adventure/create/:id', controllers.adventure.create);
 };
 

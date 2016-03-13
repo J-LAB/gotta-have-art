@@ -33,10 +33,10 @@
         </div>
         <div class "adv_nav">
           <% if (index == 0) { %>
-            <a class "adv_nav_full" href='/adventure/<%= adventure._id %>/<%= (parseInt(index) + 1) %>'>Next</a>
+            <a class "adv_nav_full" href='/adventure/<%= adventure._id %>/show/<%= (parseInt(index) + 1) %>'>Next</a>
           <% } else { %>
-            <a class "adv_nav_left" href='/adventure/<%= adventure._id %>/<%= (parseInt(index) - 1) %>'>Previous</a>
-            <a class "adv_nav_right" href='/adventure/<%= adventure._id %>/<%= (parseInt(index) + 1) %>'>Next</a>
+            <a class "adv_nav_left" href='/adventure/<%= adventure._id %>/show/<%= (parseInt(index) - 1) %>'>Previous</a>
+            <a class "adv_nav_right" href='/adventure/<%= adventure._id %>/show/<%= (parseInt(index) + 1) %>'>Next</a>
           <% } %>
         </div>
       </div>

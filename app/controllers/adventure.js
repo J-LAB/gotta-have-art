@@ -7,6 +7,29 @@ var mongoose = require('mongoose'),
 
 var adventure = {};
 
+adventure.create = function(req, res) {
+    Artwork.find({ '_id': req.params.id }, function(err, artwork) {
+      if (err) {
+        console.log('error', err);
+        return next(err);
+      }
+      var adventure = new Adventure();
+      adventure.artworks.push(artwork);
+      adventure.save(function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+
+      res.render('adventure_view', {
+        user: req.user,
+        index: req.params.index,
+        adventure: adventure,
+        artwork: artwork
+      });
+  });
+}
+
 adventure.index = function(req, res) {
   Adventure.find({}, function(err, adventures) {
     if (err) {
@@ -64,7 +87,6 @@ adventure.filter = function(req, res) {
       console.log('error getting artwork', err);
       return next(err);
     }
-    console.log(artwork);
     res.render('adventure_choose', {
       user: req.user,
       index: 0,
