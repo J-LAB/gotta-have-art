@@ -9,8 +9,28 @@
     </header>
     <main>
       <div class="jumbotron">
+        <a href="/"><img src="/img/pma2.png" height="50" class="bug" alt="PMA2 logo"></a>
         <h1><%= adventure.name %></h1>
-        <img src="/img/philly.png" alt="Philadelphia Adventure">
+        <div id="adv_view">
+            <div id="adv_img" style="background-image: url('/img/philly.png');"></div>
+            <div id="adv_details">
+                <div id="adv_buttons">
+                    <button>Info</button>
+                    <button>Map</button>
+                    <button>Comments</button>
+                </div>
+                <div id="adv_info">
+                    <h4>Artwork Name</h4>
+                    <p>Artist Name</p>
+                    <p>Description from curator</p>
+                </div>
+                <div id="adv_map">
+                    <img src="/img/fakemap.png" alt="fakemap">
+                </div>
+                <div id="comments">
+                </div>
+            </div>
+        </div>
         <div class "adv_nav">
           <% if (index == 0) { %>
             <a class "adv_nav_full" href='/adventure/<%= adventure._id %>/<%= (parseInt(index) + 1) %>'>Next</a>
