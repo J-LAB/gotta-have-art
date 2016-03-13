@@ -1,0 +1,144 @@
+#!/usr/bin/env node
+
+var mongoose = require('mongoose'),
+  cfg = require('../config'),
+  fs = require('fs'),
+  lodash = require('lodash'),
+  index = require('../app/models/index');
+
+var Artist = mongoose.model('Artist'),
+  Artwork = mongoose.model('Artwork'),
+  Adventure = mongoose.model('Adventure'),
+  Location = mongoose.model('Location'),
+  Material = mongoose.model('Material'),
+  Medium = mongoose.model('Medium'),
+  Support = mongoose.model('Support'),
+  Technique = mongoose.model('Technique');
+
+function connectDB() {
+  mongoose.connect(cfg.db);
+}
+
+function createAdventures() {
+  createPhiladelphiaAdventure();
+}
+
+function createPhiladelphiaAdventure() {
+  var collectionIds = [
+    299524,
+    104384,
+    102998,
+    103024,
+    60736,
+    103026,
+    104479,
+    90227,
+    114968,
+  ]
+  var calder = new Artist();
+  calder.name = "Alexander Calder";
+  calder.geography = "American";
+  calder.dateStart = 1898;
+  calder.dateEnd = 1976;
+  calder.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+  var metalRods = new Medium();
+  metalRods.name = 'Metal rods';
+  metalRods.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  var sheetMetal = new Medium();
+  sheetMetal.name = 'painted sheet metal';
+  sheetMetal.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  var gsh = new Location();
+  gsh.name = 'GSH_2';
+  gsh.floor = 'second';
+  gsh.type = 'gallery';
+  gsh.title = 'Great Stair Hall, second floor';
+  gsh.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+
+  var ghost = new Artwork();
+  ghost.collectionId = 60736;
+  ghost.externalId = '1965-47-1';
+  ghost.imageFilename = '1965-47-1v3-pma.jpg';
+  ghost.artistTextOne = 'Alexander Calder, American, 1898 - 1976';
+  ghost.artists.push(calder);
+  ghost.titleOne = "Ghost";
+  ghost.dateStart = 1964;
+  ghost.dateEnd = 1964;
+  ghost.mediumText = 'Metal rods, painted sheet metal';
+  ghost.mediaArray.push('Metal rods');
+  ghost.mediaArray.push('painted sheet metal');
+  ghost.media.push(metalRods);
+  ghost.media.push(sheetMetal);
+  ghost.dimensions = 'Length: 34 feet (1036.3 cm) Weight: 225lb. (102.06 kg)';
+  ghost.locationText = 'Great Stair Hall Balcony, second floor';
+  ghost.galleryText = 'GSH_2';
+  ghost.location = gsh;
+  ghost.geography = 'United States';
+  ghost.latitude = 38;
+  ghost.latitude = -98;
+  ghost.creditLine = 'Purchased with the New Members Fund, 1965';
+  ghost.purchasedDate = '1965';
+  ghost.url = 'http://www.philamuseum.org/collections/permanent/60736.html';
+  ghost.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  calder.artworks.push(ghost);
+  calder.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+
+  var newAdventure = new Adventure();
+  newAdventure.name = "Made in Philadelphia";
+  newAdventure.description = "Explore some amazing works from the city of brotherly love";
+  collectionIds.forEach(function (collectionId) {
+    if (collectionId == 60736) {
+      newAdventure.artworks.push(ghost);
+    } else {
+      Artwork.findOne({collectionId: collectionId}, function(err,artwork) {
+        console.log(artwork);
+        if (artwork) {
+          newAdventure.artworks.push(artwork);
+          newAdventure.save(function (err) {
+            if (err) {
+              console.log(err);
+            }
+          });
+        } else {
+          console.log(collectionId);
+          console.log(err);
+        }
+      });
+    }
+  });
+  newAdventure.save(function (err) {
+    if (err) {
+      console.log(err);
+    }
+  });
+}
+
+connectDB();
+createAdventures();

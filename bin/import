@@ -8,7 +8,6 @@ var mongoose = require('mongoose'),
 
 function connectDB() {
   mongoose.connect(cfg.db);
-  mongoose.connection.db.dropDatabase(function(err, result) {console.log(result);});
 }
 
 var Artist = mongoose.model('Artist'),
@@ -55,7 +54,6 @@ function addLocationData() {
       if (err) {
         console.log(err);
       }
-      console.log(locationObject.name);
     });
     statusUpdate("location");
   });
@@ -66,7 +64,6 @@ function addLocationData() {
       if (err) {
         console.log(err);
       }
-      console.log(locationName);
     });
     statusUpdate("location");
   });
