@@ -20,32 +20,37 @@ var ArtworkSchema = new Schema({
   titleThree: String,
   titleFour: String,
   dateText: String,
-  dateStart: Date,
-  dateEnd: Date,
+  dateStart: Number,
+  dateEnd: Number,
   mediumText: String,
-  mediums: [
+  mediaArray: [String],
+  media: [
     {type : Schema.ObjectId, ref : 'Medium'}
   ],
   materialsText: String,
+  materialsArray: [String],
   materials: [
     {type : Schema.ObjectId, ref : 'Material'}
   ],
   techniquesText: String,
+  techniquesArray: [String],
   techniques: [
     {type : Schema.ObjectId, ref : 'Technique'}
   ],
   supportsText: String,
+  supportsArray: [String],
   supports: [
     {type : Schema.ObjectId, ref : 'Support'}
   ],
   dimensions: String,
   locationText: String,
+  galleryText: String,
   location: { type: Schema.ObjectId, ref: 'Location', index: true },
   geography: String,
   latitude: Number,
   longitude: Number,
   creditLine: String,
-  purchasedDate: Date,
+  purchasedDate: String,
   url: String
 });
 

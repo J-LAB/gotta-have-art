@@ -3,6 +3,7 @@
 var mongoose = require('mongoose'),
   cfg = require('../config'),
   fs = require('fs'),
+  lodash = require('lodash'),
   index = require('../app/models/index');
 
 function connectDB() {
@@ -18,6 +19,14 @@ var Artist = mongoose.model('Artist'),
   Support = mongoose.model('Support'),
   Technique = mongoose.model('Technique');
 
+var locationArr = [];
+var supportArr = [];
+var artworkArr = [];
+var artistArr = [];
+var materialArr = [];
+var techniqueArr = [];
+var mediumArr = [];
+
 var locationCount = 0;
 var supportCount = 0;
 var artworkCount = 0;
@@ -30,6 +39,10 @@ function addLocationData() {
   var locationData = fs.readFileSync('./data/locations.json', 'utf8');
   locationData = JSON.parse(locationData);
   locationData.locations.forEach(function (locationObject) {
+    if (lodash.includes(locationArr, locationObject.name)) {
+      var index = lodash.indexOf(locationArr, locationObject.name);
+      locationArr = locationArr.splice(index,1);
+    }
     var newLocation = new Location();
     newLocation.name = locationObject.name;
     newLocation.type = locationObject.type;
@@ -42,30 +55,98 @@ function addLocationData() {
       if (err) {
         console.log(err);
       }
+      console.log(locationObject.name);
     });
-    locationCount++;
-    statusUpdate();
+    statusUpdate("location");
+  });
+  locationArr.forEach(function (locationName) {
+    var newLocation = new Location();
+    newLocation.name = locationName;
+    newLocation.save(function (err) {
+      if (err) {
+        console.log(err);
+      }
+      console.log(locationName);
+    });
+    statusUpdate("location");
   });
 }
-
+i = 0;
 function addArtistData() {
   var list = fs.readdirSync('./data/artists');
   list.forEach(function (file) {
     var path = "./data/artists/" + file;
     var artistFile = fs.readFileSync(path, 'utf8');
     var artistArray = artistFile.split("#");
-    artistArray.forEach(function (artist) {
-      artist = artist.trim();
-      var newArtist = new Artist();
-      newArtist.name = artist;
-      newArtist.save(function (err) {
-        if (err != null) {
-          console.log(err);
-        }
-      });
-      artistCount++;
-      statusUpdate();
+    i += artistArray.length;
+    artistArray.forEach(function (artistName) {
+      artistName = artistName.trim();
+      if (!(lodash.includes(artistArr, artistName))) {
+        artistArr.push(artistName);
+      }
     });
+  });
+  artistArr.forEach(function (artistName) {
+    var newArtist = new Artist();
+    newArtist.name = artistName;
+    newArtist.save(function (err) {
+      if (err != null) {
+        console.log(err);
+      }
+    });
+    statusUpdate("artist");
+  });
+}
+
+function addSupportData() {
+  supportArr.forEach(function (supportName) {
+    var newSupport = new Support();
+    newSupport.name = supportName;
+    newSupport.save(function (err) {
+      if (err != null) {
+        console.log(err);
+      }
+    });
+    statusUpdate("support");
+  });
+}
+
+function addMaterialData() {
+  materialArr.forEach(function (materialName) {
+    var newMaterial = new Material();
+    newMaterial.name = materialName;
+    newMaterial.save(function (err) {
+      if (err != null) {
+        console.log(err);
+      }
+    });
+    statusUpdate("material");
+  });
+}
+
+function addTechniqueData() {
+  techniqueArr.forEach(function (techniqueName) {
+    var newTechnique = new Technique();
+    newTechnique.name = techniqueName;
+    newTechnique.save(function (err) {
+      if (err != null) {
+        console.log(err);
+      }
+    });
+    statusUpdate("technique");
+  });
+}
+
+function addMediumData() {
+  mediumArr.forEach(function (mediumName) {
+    var newMedium = new Medium();
+    newMedium.name = mediumName;
+    newMedium.save(function (err) {
+      if (err != null) {
+        console.log(err);
+      }
+    });
+    statusUpdate("medium");
   });
 }
 
@@ -73,115 +154,172 @@ function addArtistData() {
 function addArtworkData() {
   var artworkData = fs.readFileSync('./data/artworks.json', 'utf8');
   artworkData = JSON.parse(artworkData);
+  artworkArr = artworkData;
   for(var i = 0; i < artworkData.length; i++) {
     var newArtwork = new Artwork();
     newArtwork.collectionId = artworkData[i].objectid;
     newArtwork.externalId = artworkData[i].objectnumber;
     newArtwork.imageFilename = artworkData[i].imageFilename;
     if ('artistName1' in artworkData[i]) {
-      var artistName = artworkData[i].artistName1;
-      newArtwork.artistTextOne = artistName;
-      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
-        if (err) {
-          console.log(err);
-        }
-
-        if (created) {
-          artistCount++;
-          statusUpdate();
-        }
-        newArtwork.artists.push(artist);
-      });
+      var artistName1 = artworkData[i].artistName1;
+      newArtwork.artistTextOne = artistName1;
+      if (!(lodash.includes(artistArr, artistName1))){
+        artistArr.push(artistName1);
+      }
+      /* Artist.findOrCreate({ name: artistName }, function (err, artist, created) { */
+      /*   if (err) { */
+      /*     console.log(err); */
+      /*   } */
+      /*  */
+      /*   if (created) { */
+      /*     artistCount++; */
+      /*     statusUpdate(); */
+      /*   } */
+      /*   newArtwork.artists.push(artist); */
+      /*   newArtwork.save(function (err) { */
+      /*     if (err) { */
+      /*       console.log(err); */
+      /*     } */
+      /*   }); */
+      /* }); */
     };
     if ('artistName2' in artworkData[i]) {
-      var artistName = artworkData[i].artistName2;
-      newArtwork.artistTextTwo = artistName;
-      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
-        if (err) {
-          console.log(err);
-        }
-
-        if (created) {
-          artistCount++;
-          statusUpdate();
-        }
-        newArtwork.artists.push(artist);
-      });
+      var artistName2 = artworkData[i].artistName2;
+      newArtwork.artistTextTwo = artistName2;
+      if (!(lodash.includes(artistArr, artistName2))){
+        artistArr.push(artistName2);
+      }
+      /* Artist.findOrCreate({ name: artistName }, function (err, artist, created) { */
+      /*   if (err) { */
+      /*     console.log(err); */
+      /*   } */
+      /*  */
+      /*   if (created) { */
+      /*     artistCount++; */
+      /*     statusUpdate(); */
+      /*   } */
+      /*   newArtwork.artists.push(artist); */
+      /*   newArtwork.save(function (err) { */
+      /*     if (err) { */
+      /*       console.log(err); */
+      /*     } */
+      /*   }); */
+      /* }); */
     }
     if ('artistName3' in artworkData[i]) {
-      var artistName = artworkData[i].artistName3;
-      newArtwork.artistTextThree = artistName;
-      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
-        if (err) {
-          console.log(err);
-        }
-
-        if (created) {
-          artistCount++;
-          statusUpdate();
-        }
-        newArtwork.artists.push(artist);
-      });
+      var artistName3 = artworkData[i].artistName3;
+      newArtwork.artistTextThree = artistName3;
+      if (!(lodash.includes(artistArr, artistName3))){
+        artistArr.push(artistName3);
+      }
+      /* Artist.findOrCreate({ name: artistName }, function (err, artist, created) { */
+      /*   if (err) { */
+      /*     console.log(err); */
+      /*   } */
+      /*  */
+      /*   if (created) { */
+      /*     artistCount++; */
+      /*     statusUpdate(); */
+      /*   } */
+      /*   newArtwork.artists.push(artist); */
+      /*   newArtwork.save(function (err) { */
+      /*     if (err) { */
+      /*       console.log(err); */
+      /*     } */
+      /*   }); */
+      /* }); */
     }
     if ('artistName4' in artworkData[i]) {
-      var artistName = artworkData[i].artistName4;
-      newArtwork.artistTextFour = artistName;
-      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
-        if (err) {
-          console.log(err);
-        }
-
-        if (created) {
-          artistCount++;
-          statusUpdate();
-        }
-        newArtwork.artists.push(artist);
-      });
+      var artistName4 = artworkData[i].artistName4;
+      newArtwork.artistTextFour = artistName4;
+      if (!(lodash.includes(artistArr, artistName4))){
+        artistArr.push(artistName4);
+      }
+      /* Artist.findOrCreate({ name: artistName }, function (err, artist, created) { */
+      /*   if (err) { */
+      /*     console.log(err); */
+      /*   } */
+      /*  */
+      /*   if (created) { */
+      /*     artistCount++; */
+      /*     statusUpdate(); */
+      /*   } */
+      /*   newArtwork.artists.push(artist); */
+      /*   newArtwork.save(function (err) { */
+      /*     if (err) { */
+      /*       console.log(err); */
+      /*     } */
+      /*   }); */
+      /* }); */
     }
     if ('artistName5' in artworkData[i]) {
-      var artistName = artworkData[i].artistName5;
-      newArtwork.artistTextFive = artistName;
-      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
-        if (err) {
-          console.log(err);
-        }
-
-        if (created) {
-          artistCount++;
-          statusUpdate();
-        }
-        newArtwork.artists.push(artist);
-      });
+      var artistName5 = artworkData[i].artistName5;
+      newArtwork.artistTextFive = artistName5;
+      if (!(lodash.includes(artistArr, artistName5))){
+        artistArr.push(artistName5);
+      }
+      /* Artist.findOrCreate({ name: artistName }, function (err, artist, created) { */
+      /*   if (err) { */
+      /*     console.log(err); */
+      /*   } */
+      /*  */
+      /*   if (created) { */
+      /*     artistCount++; */
+      /*     statusUpdate(); */
+      /*   } */
+      /*   newArtwork.artists.push(artist); */
+      /*   newArtwork.save(function (err) { */
+      /*     if (err) { */
+      /*       console.log(err); */
+      /*     } */
+      /*   }); */
+      /* }); */
     }
     if ('artistName6' in artworkData[i]) {
-      var artistName = artworkData[i].artistName6;
-      newArtwork.artistTextSix = artistName;
-      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
-        if (err) {
-          console.log(err);
-        }
-
-        if (created) {
-          artistCount++;
-          statusUpdate();
-        }
-        newArtwork.artists.push(artist);
-      });
+      var artistName6 = artworkData[i].artistName6;
+      newArtwork.artistTextSix = artistName6;
+      if (!(lodash.includes(artistArr, artistName6))){
+        artistArr.push(artistName6);
+      }
+      /* Artist.findOrCreate({ name: artistName }, function (err, artist, created) { */
+      /*   if (err) { */
+      /*     console.log(err); */
+      /*   } */
+      /*  */
+      /*   if (created) { */
+      /*     artistCount++; */
+      /*     statusUpdate(); */
+      /*   } */
+      /*   newArtwork.artists.push(artist); */
+      /*   newArtwork.save(function (err) { */
+      /*     if (err) { */
+      /*       console.log(err); */
+      /*     } */
+      /*   }); */
+      /* }); */
     }
     if ('artistName7' in artworkData[i]) {
-      var artistName = artworkData[i].artistName7;
-      newArtwork.artistTextSeven = artistName;
-      Artist.findOrCreate({ name: artistName }, function (err, artist, created) {
-        if (err) {
-          console.log(err);
-        }
-
-        if (created) {
-          artistCount++;
-          statusUpdate();
-        }
-        newArtwork.artists.push(artist);
-      });
+      var artistName7 = artworkData[i].artistName7;
+      newArtwork.artistTextSeven = artistName7;
+      if (!(lodash.includes(artistArr, artistName7))){
+        artistArr.push(artistName7);
+      }
+      /* Artist.findOrCreate({ name: artistName }, function (err, artist, created) { */
+      /*   if (err) { */
+      /*     console.log(err); */
+      /*   } */
+      /*  */
+      /*   if (created) { */
+      /*     artistCount++; */
+      /*     statusUpdate(); */
+      /*   } */
+      /*   newArtwork.artists.push(artist); */
+      /*   newArtwork.save(function (err) { */
+      /*     if (err) { */
+      /*       console.log(err); */
+      /*     } */
+      /*   }); */
+      /* }); */
     }
     newArtwork.titleOne = artworkData[i].titleOfWork1;
     newArtwork.titleTwo = artworkData[i].titleOfWork2;
@@ -193,67 +331,103 @@ function addArtworkData() {
       newArtwork.mediumText = artworkData[i].medium;
       var mediumArray = artworkData[i].medium.split(",");
       mediumArray.forEach(function (mediumName) {
-        Medium.findOrCreate({ name: mediumName.trim() }, function (err, medium, created) {
-          if (err) {
-            console.log(err);
-          }
-          if (created) {
-            mediumCount++;
-            statusUpdate();
-          }
-          newArtwork.mediums.push(medium);
-        });
+        newArtwork.mediaArray.push(mediumName);
+        if (!(lodash.includes(mediumArr, mediumName))) {
+          mediumArr.push(mediumName);
+        }
+        /* Medium.findOrCreate({ name: mediumName.trim() }, function (err, medium, created) { */
+        /*   if (err) { */
+        /*     console.log(err); */
+        /*   } */
+        /*   if (created) { */
+        /*     mediumCount++; */
+        /*     statusUpdate(); */
+        /*   } */
+        /*   newArtwork.mediums.push(medium); */
+        /*   newArtwork.save(function (err) { */
+        /*     if (err) { */
+        /*       console.log(err); */
+        /*     } */
+        /*   }); */
+        /* }); */
       });
     }
     if ('materials' in artworkData[i]) {
       newArtwork.materialsText = artworkData[i].materials;
       var materialsArray = artworkData[i].materials.split(",");
       materialsArray.forEach(function (materialName) {
-        Material.findOrCreate({ name: materialName.trim() }, function (err, material, created) {
-          if (err) {
-            console.log(err);
-          }
-          if (created) {
-            materialCount++;
-            statusUpdate();
-          }
-
-          newArtwork.materials.push(material);
-        });
+        newArtwork.materialsArray.push(materialName);
+        if (!(lodash.includes(materialArr, materialName))) {
+          materialArr.push(materialName);
+        }
+        /* Material.findOrCreate({ name: materialName.trim() }, function (err, material, created) { */
+        /*   if (err) { */
+        /*     console.log(err); */
+        /*   } */
+        /*   if (created) { */
+        /*     materialCount++; */
+        /*     statusUpdate(); */
+        /*   } */
+        /*  */
+        /*   newArtwork.materials.push(material); */
+        /*   newArtwork.save(function (err) { */
+        /*     if (err) { */
+        /*       console.log(err); */
+        /*     } */
+        /*   }); */
+        /* }); */
       });
     }
     if ('techniques' in artworkData[i]) {
       newArtwork.techniquesText = artworkData[i].techniques;
       var techniquesArray = artworkData[i].techniques.split(",");
       techniquesArray.forEach(function (techniqueName) {
-        Technique.findOrCreate({ name: techniqueName.trim() }, function (err, technique, created) {
-          if (err) {
-            console.log(err);
-          }
-          if (created) {
-            techniqueCount++;
-            statusUpdate();
-          }
-
-          newArtwork.techniques.push(technique);
-        });
+        newArtwork.techniquesArray.push(techniqueName);
+        if (!(lodash.includes(techniqueArr, techniqueName))) {
+          techniqueArr.push(techniqueName);
+        }
+        /* Technique.findOrCreate({ name: techniqueName.trim() }, function (err, technique, created) { */
+        /*   if (err) { */
+        /*     console.log(err); */
+        /*   } */
+        /*   if (created) { */
+        /*     techniqueCount++; */
+        /*     statusUpdate(); */
+        /*   } */
+        /*  */
+        /*   newArtwork.techniques.push(technique); */
+        /*   newArtwork.save(function (err) { */
+        /*     if (err) { */
+        /*       console.log(err); */
+        /*     } */
+        /*   }); */
+        /* }); */
       });
     }
     if ('supports' in artworkData[i]) {
       newArtwork.supportsText = artworkData[i].supports;
       var supportsArray = artworkData[i].supports.split(",");
       supportsArray.forEach(function (supportName) {
-        Support.findOrCreate({ name: supportName.trim() }, function (err, support, created) {
-          if (err) {
-            console.log(err);
-          }
-          if (created) {
-            supportCount++;
-            statusUpdate();
-          }
-
-          newArtwork.supports.push(support);
-        });
+        newArtwork.supportsArray.push(supportName);
+        if (!(lodash.includes(supportArr, supportName))) {
+          supportArr.push(supportName);
+        }
+        /* Support.findOrCreate({ name: supportName.trim() }, function (err, support, created) { */
+        /*   if (err) { */
+        /*     console.log(err); */
+        /*   } */
+        /*   if (created) { */
+        /*     supportCount++; */
+        /*     statusUpdate(); */
+        /*   } */
+        /*  */
+        /*   newArtwork.supports.push(support); */
+        /*   newArtwork.save(function (err) { */
+        /*     if (err) { */
+        /*       console.log(err); */
+        /*     } */
+        /*   }); */
+        /* }); */
       });
     }
     newArtwork.dimensions = artworkData[i].dimensions;
@@ -264,17 +438,26 @@ function addArtworkData() {
       var match = galleryRegex.exec(locationName);
       if (match != null) {
         locationName = match[1];
+        newArtwork.galleryText = match[1];
       }
-      Location.findOrCreate({ name: locationName }, function (err, location, created) {
-        if (err) {
-          console.log(err);
-        }
-        if (created) {
-          locationCount++;
-          statusUpdate();
-        }
-        newArtwork.location = location;
-      });
+      if (!(lodash.includes(locationArr, locationName))) {
+        locationArr.push(locationName);
+      }
+      /* Location.findOrCreate({ name: locationName }, function (err, location, created) { */
+      /*   if (err) { */
+      /*     console.log(err); */
+      /*   } */
+      /*   if (created) { */
+      /*     locationCount++; */
+      /*     statusUpdate(); */
+      /*   } */
+      /*   newArtwork.location = location; */
+      /*   newArtwork.save(function (err) { */
+      /*     if (err) { */
+      /*       console.log(err); */
+      /*     } */
+      /*   }); */
+      /* }); */
     }
     newArtwork.latitude = artworkData[i].latitude;
     newArtwork.longitude = artworkData[i].longitude;
@@ -285,26 +468,54 @@ function addArtworkData() {
         console.log(err);
       }
     });
-    artworkCount++;
-    statusUpdate();
+    statusUpdate("artwork");
   }
 }
 
 function run() {
   connectDB();
+  addArtworkData();
   addLocationData();
   addArtistData();
-  addArtworkData();
+  addMaterialData();
+  addSupportData();
+  addMediumData();
+  addTechniqueData();
 }
 
-function statusUpdate() {
-  console.log(locationCount + " locations added \n");
-  console.log(artistCount + " artists added \n");
-  console.log(artworkCount + " artworks added \n");
-  console.log(materialCount + " materials added \n");
-  console.log(mediumCount + " medium added \n");
-  console.log(techniqueCount + " techniques added \n");
-  console.log(supportCount + " supports added \n");
+function statusUpdate(type) {
+  switch (type) {
+      case "artwork":
+          artworkCount++;
+          break;
+      case "artist":
+          artistCount++;
+          break;
+      case "location":
+          locationCount++;
+          break;
+      case "medium":
+          mediumCount++;
+          break;
+      case "material":
+          materialCount++;
+          break;
+      case "technique":
+          techniqueCount++;
+          break;
+      case "support":
+          supportCount++;
+          break;
+      default:
+        console.log(type);
+  }
+  console.log(locationCount + " locations added of "+locationArr.length);
+  console.log(artistCount + " artists added of "+artistArr.length);
+  console.log(artworkCount + " artworks added of "+artworkArr.length);
+  console.log(materialCount + " materials added of "+materialArr.length);
+  console.log(mediumCount + " media added of "+mediumArr.length);
+  console.log(techniqueCount + " techniques added of "+techniqueArr.length);
+  console.log(supportCount + " supports added of "+supportArr.length);
 }
 
 run();

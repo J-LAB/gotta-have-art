@@ -5,8 +5,8 @@ var mongoose = require('mongoose'),
 var ArtistSchema = new Schema({
 	name: String,
 	geography: String,
-	dateStart: Date,
-	dateEnd: Date,
+	dateStart: Number,
+	dateEnd: Number,
 	artworks: [
     {type : Schema.ObjectId, ref : 'Artwork'}
   ]
