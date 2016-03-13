@@ -1,59 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
+  <head>
     <% include ./partials/head %>
-</head>
-<body class="container">
-
+  </head>
+  <body class="container">
     <header>
-        <% include ./partials/header %>
+      <% include ./partials/header %>
     </header>
-
     <main>
-        <div class="jumbotron">
-        <h1><span>Pick My Art</span>
-            <span>Adventure</span></h1>
+      <div class="jumbotron">
+        <h1>
+          <span>Pick My Art</span>
+          <span>Adventure</span>
+        </h1>
         <p class="pitch">Engage yourself at the Philadelphia Museum of art in fun, easy, and exciting new ways through self-guided adventures curated by museum staff to explore various subjects in the collection, user-curated tours of the collections, and visitor-generated conversations.</p>
         <div id="curated">
+          <% for(var i=0; i<adventures.length; i++) { %>
             <div class="adv">
-                <img src="/img/philly.png" alt="Philadelphia Adventure">
+              <img src="/img/philly.png" alt="Philadelphia Adventure">
+              <a href='/adventure/<%= adventures[i]._id %>'><%= adventures[i].name %></a>
             </div>
-            <div class="adv">
-                <img src="/img/warhol.png" alt="Warhol Adventure">
-            </div>
-            <div class="adv">
-                <img src="/img/patrick.png" alt="St. Patrick's Adventure">
-            </div>
-            <div class="adv">
-                <img src="/img/create.png" alt="Create Your Own Adventure">
-            </div>
-            <div class="adv">
-                <img src="/img/create.png" alt="Create Your Own Adventure">
-            </div>
+          <% }; %>
+          <div class="adv">
+              <img src="/img/warhol.png" alt="Warhol Adventure">
+          </div>
+          <div class="adv">
+              <img src="/img/patrick.png" alt="St. Patrick's Adventure">
+          </div>
+          <div class="adv">
+              <img src="/img/create.png" alt="Create Your Own Adventure">
+          </div>
+          <div class="adv">
+              <img src="/img/create.png" alt="Create Your Own Adventure">
+          </div>
         </div>
-          <% if (message) { %>
-            <p><%= message %></p>
-          <% } %>
-          <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-          <!-- <script src="js/jquery.min.js"></script> -->
-          <!-- Include all compiled plugins (below), or include individual files as needed -->
-           <!--  <script src="js/bootstrap.min.js"></script> -->
-        </div>
+      </div>
     </main>
     <footer>
-        <div class="bubbles">
-            <img src="/img/kara.png" height="100" width="100" alt="Kara">
-            <img src="/img/amy.png" height="100" width="100" alt="Amy">
-            <img src="/img/aaron.png" height="100" width="100" alt="Aaron">
-            <img src="/img/johnb.png" height="100" width="100" alt="John">
-            <img src="/img/hackathon.png" height="100" width="100" alt="Power of Art Hackathon logo">
-            <img src="/img/pmoa.png" height="100" width="100" alt="Phildadelphia Art Museum logo">
-        </div>
-        <p>Built by Kara, Amy, Aaron and John for the Power of Art Hackathon at the Philadelphia Museum of Art.</p>
+      <div class="bubbles">
+        <img src="/img/kara.png" height="100" width="100" alt="Kara">
+        <img src="/img/amy.png" height="100" width="100" alt="Amy">
+        <img src="/img/aaron.png" height="100" width="100" alt="Aaron">
+        <img src="/img/johnb.png" height="100" width="100" alt="John">
+        <img src="/img/hackathon.png" height="100" width="100" alt="Power of Art Hackathon logo">
+        <img src="/img/pmoa.png" height="100" width="100" alt="Phildadelphia Art Museum logo">
+      </div>
+      <p>Built by Kara, Amy, Aaron and John for the Power of Art Hackathon at the Philadelphia Museum of Art.</p>
     </footer>
     <div id="background">
-        <div id="fuzz"></div>
-        <div id="mosaic"></div> 
+      <div id="fuzz"></div>
+      <div id="mosaic"></div> 
     </div>
-</body>
+  </body>
 </html>

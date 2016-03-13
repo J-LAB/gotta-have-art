@@ -1,5 +1,5 @@
 var controllers = {};
 
-controllers.account = require('./artwork');
+controllers.adventure = require('./adventure');
 
 module.exports = controllers;
