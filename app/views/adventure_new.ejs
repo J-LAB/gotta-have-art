@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./partials/head %>
+  </head>
+  <body class="container">
+    <header>
+      <% include ./partials/header %>
+    </header>
+    <main>
+      <div class="jumbotron">
+        <p class="pitch">Create a custom adventure for everyone to enjoy</p>
+        <form action='/adventure/filter' method="post">
+          <div>
+            <label>Artist</label>
+            <input type="text" name="artist" list="artists"/><br/>
+            <datalist id="artists">
+              <% for(var i=0; i<artists.length; i++) { %>
+                <option value='<%= artists[i].name %>'>
+              <% }; %>
+            </datalist>
+          </div>
+          <div>
+            <label>Medium</label>
+            <input type="text" name="medium" list="media"/><br/>
+            <datalist id="media">
+              <% for(var i=0; i<media.length; i++) { %>
+                <option value='<%= media[i].name %>'>
+              <% }; %>
+            </datalist>
+          </div>
+          <div>
+            <label>Date range start:</label>
+            <input type="number" name="date_start"/><br/>
+          </div>
+          <div>
+            <label>Date range end:</label>
+            <input type="number" name="date_end"/><br/>
+          </div>
+          <div>
+            <input type="submit" class="btn btn-primary" value="Search"/>
+          </div>
+        </form>
+      </div>
+    </main>
+    <div id="background">
+      <div id="fuzz"></div>
+    </div>
+  </body>
+</html>

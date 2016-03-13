@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ./partials/head %>
+  </head>
+  <body class="container">
+    <header>
+      <% include ./partials/header %>
+    </header>
+    <main>
+      <div class="jumbotron">
+        <h1><%= artwork.titleOne %></h1>
+        <h2><%= artwork.artistTextOne %></h2>
+        <img src='/img/full-res/<%= artwork.imageFilename %>' alt='<%= artwork.titleOne %>'>
+        <div class "adv_nav">
+          <a class "adv_nav_left" href='/'>Reject</a>
+          <a class "adv_nav_right" href='/adventure/<%= index %>/add/<%= artwork._id %>'>Approve</a>
+        </div>
+      </div>
+    </main>
+    <div id="background">
+      <div id="fuzz"></div>
+    </div>
+  </body>
+</html>

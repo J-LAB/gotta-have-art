@@ -18,7 +18,7 @@
           <% for(var i=0; i<adventures.length; i++) { %>
             <div class="adv">
               <img src="/img/philly.png" alt="Philadelphia Adventure">
-              <a href='/adventure/<%= adventures[i]._id %>'><%= adventures[i].name %></a>
+              <a href='/adventure/<%= adventures[i]._id %>/details'><%= adventures[i].name %></a>
             </div>
           <% }; %>
           <div class="adv">
@@ -32,6 +32,7 @@
           </div>
           <div class="adv">
               <img src="/img/create.png" alt="Create Your Own Adventure">
+              <a href='/adventure/new'>Create Your Own Adventure</a>
           </div>
         </div>
       </div>
