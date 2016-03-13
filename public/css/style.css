@@ -62,10 +62,32 @@ body.container {
 
 body.container h1 {
     text-align: center;
+    color: #03007f;
+    text-shadow: 0px 0px 2px white, 
+                 1px 1px 0 black,
+                 2px 2px 0 black,
+                 3px 4px 0 black,
+                 4px 4px 0 black,
+                 5px 5px 0 black;
 }
 
 body.container h1 span {
     display: block;
+}
+
+#title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 24px 0;
+}
+
+#title > * {
+    margin: 0 24px;
+} 
+
+#title > p {
+    margin-top: 12px;
 }
 
 body.container h1 span:first-of-type {
@@ -88,7 +110,7 @@ body.container h1 span:last-of-type {
 }
 
 .pitch {
-    width: 50%;
+    width: 33%;
 }
 
 #curated {
